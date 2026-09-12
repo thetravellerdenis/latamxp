@@ -1,0 +1,3 @@
+txt
+# Dependencias para LatamXP
+# por ahora solo estandar, despúes agregamos más cosas
