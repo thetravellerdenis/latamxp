@@ -1,19 +1,39 @@
-# Environment
-.env
+# Environments
 venv/
 env/
+ENV/
+.venv/
+.env
 
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
 
-# Database
+# Flask instance folder (local DBs, configs)
+instance/
 *.db
 *.sqlite3
 *.sql
 
-# IDE
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Windows OS files
+desktop.ini
+Thumbs.db
+ehthumbs.db
+
+# macOS files
+.DS_Store
+
+# IDE / VSCode
 .vscode/
 .idea/
-.DS_Store
