@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}LatamXP — Discover Latin America{% endblock %}
+
+{% block content %}
+<section class="hero-ba"
+    style="min-height: 65vh; background: url('https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=1600') center/cover no-repeat;">
+    <div class="hero-ba__overlay"></div>
+    <div class="container hero-ba__content" style="text-align: center; max-width: 900px;">
+        <span class="hero-ba__badge"><i class="fa-solid fa-star"></i> Latam Experience</span>
+        <h1 class="hero-ba__title" style="font-size: 3.5rem;">Discover Latin America</h1>
+        <p class="hero-ba__subtitle" style="margin: 0 auto 30px;">Immersive audio guides and interactive maps. No
+            groups, no schedules.</p>
+
+        <!-- ВОЗВРАЩЕННАЯ ПОИСКОВАЯ СТРОКА -->
+        <form action="/search" method="GET"
+            style="display: flex; max-width: 600px; margin: 0 auto; background: white; padding: 5px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <input type="text" name="q" placeholder="Search for a city or tour..."
+                style="flex: 1; border: none; outline: none; padding: 15px 25px; border-radius: 50px; font-size: 1rem;">
+            <button type="submit" class="btn" style="margin: 0; border-radius: 50px; padding: 15px 35px;"><i
+                    class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </form>
+    </div>
+</section>
+
+<section class="container" style="padding: 60px 0 20px;">
+    <h2 class="ba-tours__title">Explore by Category</h2>
+    <div class="grid-4"
+        style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 30px; text-align: center;">
+        <a href="/countries" style="text-decoration: none; color: inherit;">
+            <div class="ba-tour-card"
+                style="padding: 20px 10px; background: #fff; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <i class="fa-solid fa-landmark" style="font-size: 2rem; color: #FEDD00; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 1rem; color: #0c2a4d; margin: 0;">History</h4>
+            </div>
+        </a>
+        <a href="/countries" style="text-decoration: none; color: inherit;">
+            <div class="ba-tour-card"
+                style="padding: 20px 10px; background: #fff; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <i class="fa-solid fa-utensils" style="font-size: 2rem; color: #FEDD00; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 1rem; color: #0c2a4d; margin: 0;">Food</h4>
+            </div>
+        </a>
+        <a href="/countries" style="text-decoration: none; color: inherit;">
+            <div class="ba-tour-card"
+                style="padding: 20px 10px; background: #fff; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <i class="fa-solid fa-building" style="font-size: 2rem; color: #FEDD00; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 1rem; color: #0c2a4d; margin: 0;">Architecture</h4>
+            </div>
+        </a>
+        <a href="/countries" style="text-decoration: none; color: inherit;">
+            <div class="ba-tour-card"
+                style="padding: 20px 10px; background: #fff; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <i class="fa-solid fa-music" style="font-size: 2rem; color: #FEDD00; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 1rem; color: #0c2a4d; margin: 0;">Tango</h4>
+            </div>
+        </a>
+        <a href="/countries" style="text-decoration: none; color: inherit;">
+            <div class="ba-tour-card"
+                style="padding: 20px 10px; background: #fff; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                <i class="fa-solid fa-city" style="font-size: 2rem; color: #FEDD00; margin-bottom: 10px;"></i>
+                <h4 style="font-size: 1rem; color: #0c2a4d; margin: 0;">Neighborhoods</h4>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="ba-tours" style="padding-top: 40px;">
+    <div class="container">
+        <h2 class="ba-tours__title">Popular Tours</h2>
+        <p class="ba-tours__subtitle">Best experiences chosen by our travelers.</p>
+
+        <div class="ba-tours__grid">
+            {% for tour in tours %}
+            <article class="ba-tour-card">
+                <div class="ba-tour-card__img">
+                    <img src="{{ tour.portada_url }}" alt="{{ tour.titulo }}">
+                    <span class="ba-tour-card__tag">{{ tour.city }}</span>
+                </div>
+                <div class="ba-tour-card__body">
+                    <h3>{{ tour.titulo }}</h3>
+                    <div
+                        style="display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: #666; margin-bottom: 15px;">
+                        <i class="fa-regular fa-clock" style="color: var(--sun-yellow);"></i>
+                        <span>{{ tour.duracion_minutos }} mins</span>
+                    </div>
+                    <div class="ba-tour-card__bottom">
+                        <div class="ba-tour-card__price">
+                            <span class="price-value">${{ "%.2f"|format(tour.precio_float) }}</span>
+                        </div>
+                        <a href="/tour/{{ tour.id_tour }}" class="btn-details">View Tour</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section style="background: #fff; padding: 60px 0;">
+    <div class="container">
+        <h2 class="ba-tours__title">Choose your destination</h2>
+        <p class="ba-tours__subtitle">Start your journey by selecting a country.</p>
+
+        <div class="ba-tours__grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+            {% for country, flag in countries %}
+            <a href="/country/{{ country }}" style="text-decoration: none; color: inherit;">
+                <article class="ba-tour-card"
+                    style="text-align: center; padding: 30px 20px; cursor: pointer; background: #f8f9fa; border: 1px solid #eee;">
+                    <img src="{{ flag }}" alt="{{ country }} flag"
+                        style="width: 70px; height: auto; margin: 0 auto 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 1.2rem; color: #0c2a4d; margin-bottom: 10px;">{{ country }}</h3>
+                    <span class="btn-details" style="padding: 5px 12px; font-size: 0.85rem;">Explore</span>
+                </article>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section style="background: #0c2a4d; padding: 80px 0; margin: 60px 0; color: white;">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 40px;">
+        <div style="flex: 1;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px; color: #FEDD00;">Free Latin America Guide</h2>
+            <p style="font-size: 1.1rem; color: #ddd; margin-bottom: 30px; line-height: 1.6;">Get our free guide with
+                everything you need to know: transport, SIM cards, safety tips, and local secrets. Read it online or
+                download the PDF!</p>
+            <a href="/free-guide" class="btn" style="padding: 15px 40px; font-size: 1.1rem;">
+                <i class="fa-solid fa-book-open"></i> Read Free Guide
+            </a>
+        </div>
+        <div style="flex: 1; text-align: right;">
+            <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600" alt="Guide"
+                style="max-width: 80%; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 60px 0;">
+    <h2 class="ba-tours__title">How it Works</h2>
+    <div class="ba-tours__grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 40px;">
+        <div class="ba-tour-card" style="padding: 40px 30px; text-align: center; border-top: 5px solid #FEDD00;">
+            <i class="fa-solid fa-cart-shopping" style="font-size: 2.5rem; color: #0c2a4d; margin-bottom: 20px;"></i>
+            <h3>1. Buy a Tour</h3>
+            <p style="color: #666;">Select a city and buy your tour securely online.</p>
+        </div>
+        <div class="ba-tour-card" style="padding: 40px 30px; text-align: center; border-top: 5px solid #FEDD00;">
+            <i class="fa-solid fa-download" style="font-size: 2.5rem; color: #0c2a4d; margin-bottom: 20px;"></i>
+            <h3>2. Download Audio</h3>
+            <p style="color: #666;">Download the audio files to your phone. Works offline!</p>
+        </div>
+        <div class="ba-tour-card" style="padding: 40px 30px; text-align: center; border-top: 5px solid #FEDD00;">
+            <i class="fa-solid fa-headphones" style="font-size: 2.5rem; color: #0c2a4d; margin-bottom: 20px;"></i>
+            <h3>3. Explore</h3>
+            <p style="color: #666;">Walk the city and listen as the story unfolds at your pace.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

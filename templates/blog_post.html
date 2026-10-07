@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container" style="padding: 60px 0; max-width: 800px;">
+    <a href="/blog" style="color: #0c2a4d; font-weight: 600;"><i class="fa-solid fa-arrow-left"></i> Back to Blog</a>
+    <h1 style="font-size: 2.5rem; color: #0c2a4d; margin: 20px 0;">{{ post.title }}</h1>
+    <img src="{{ post.image_url }}" style="width: 100%; border-radius: 15px; margin-bottom: 30px;">
+    <p style="font-size: 1.1rem; line-height: 1.8; color: #444;">{{ post.content }}</p>
+</section>
+{% endblock %}

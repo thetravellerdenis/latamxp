@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}{{ tour.titulo }} — LatamXP{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+    .tour-layout {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 50px;
+        align-items: start;
+    }
+
+    .sticky-sidebar {
+        position: sticky;
+        top: 100px;
+    }
+
+    #map {
+        height: 400px;
+        width: 100%;
+        border-radius: 18px;
+        z-index: 1;
+        margin-bottom: 20px;
+        background: #eee;
+    }
+
+    @media (max-width: 992px) {
+        .tour-layout {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .sticky-sidebar {
+            position: static;
+        }
+
+        .tour-hero-img {
+            height: 300px !important;
+        }
+    }
+</style>
+
+<section class="container" style="padding: 40px 0;">
+    <div class="tour-breadcrumbs"
+        style="background: none; border: none; padding: 0; margin-bottom: 20px; flex-wrap: wrap;">
+        <a href="/">Home</a> <span>/</span> <a href="/country/{{ tour.country }}">{{ tour.country }}</a> <span>/</span>
+        <a href="/city/{{ tour.city }}">{{ tour.city }}</a> <span>/</span> <span>{{ tour.titulo }}</span>
+    </div>
+
+    <div class="tour-layout">
+        <div>
+            <div
+                style="border-radius: 20px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);">
+                <img src="{{ tour.portada_url }}" alt="{{ tour.titulo }}" class="tour-hero-img"
+                    style="width: 100%; height: 500px; object-fit: cover;"
+                    onerror="this.src='https://placehold.co/800x500?text=No+Image';">
+            </div>
+
+            <span class="ba-tour-card__tag" style="position: static; display: inline-block; margin-bottom: 15px;">{{
+                tour.categoria }}</span>
+            <h1 style="font-size: 2.5rem; color: var(--navy); margin-bottom: 15px; line-height: 1.2;">{{ tour.titulo }}
+            </h1>
+
+            <div class="rating-stars" style="margin-bottom: 30px;">
+                {% set rating = tour.get_avg_rating() %}
+                {% for i in range(5) %}
+                {% if i < rating|int %}<i class="fa-solid fa-star"></i>{% else %}<i class="fa-regular fa-star"></i>{%
+                    endif %}
+                    {% endfor %}
+                    <span style="color: #666; font-weight: 600; margin-left: 10px; font-family: 'Raleway';">{{
+                        "%.1f"|format(rating) }} ({{ reviews|length }} reviews)</span>
+            </div>
+
+            <h3
+                style="color: var(--navy); border-bottom: 2px solid #fedd00; padding-bottom: 10px; margin-bottom: 20px; display: inline-block;">
+                About this tour</h3>
+            <p style="font-size: 1.1rem; color: #444; line-height: 1.8; margin-bottom: 40px;">{{ tour.descripcion }}</p>
+
+            <h3
+                style="color: var(--navy); border-bottom: 2px solid #fedd00; padding-bottom: 10px; margin-bottom: 20px; display: inline-block;">
+                Route Map</h3>
+            {% if tour.map_coords %}
+            <div id="map"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ tour.map_coords }}" target="_blank"
+                class="btn-outline--dark"
+                style="display: inline-block; margin-bottom: 40px; padding: 10px 20px; border-radius: 10px; text-decoration: none;">
+                <i class="fa-solid fa-map-location-dot"></i> Open in Google Maps
+            </a>
+            {% endif %}
+
+            <h3
+                style="color: var(--navy); border-bottom: 2px solid #fedd00; padding-bottom: 10px; margin-bottom: 20px; display: inline-block;">
+                Points of Interest</h3>
+            <ul style="list-style: none; padding: 0; margin-bottom: 40px;">
+                {% for poi in tour.puntos %}
+                <li
+                    style="padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; display: flex; gap: 15px; align-items: center;">
+                    <div
+                        style="background: var(--navy); color: #fedd00; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; flex-shrink: 0;">
+                        {{ loop.index }}</div>
+                    <div>
+                        <strong style="color: var(--navy);">{{ poi.nombre }}</strong>
+                        <p style="margin: 0; font-size: 0.9rem; color: #666;">{{ poi.descripcion }}</p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="sticky-sidebar">
+            <div class="hero-booking-card" style="border: 2px solid #fedd00; padding: 30px;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: var(--navy); margin-bottom: 20px;">
+                    ${{ "%.2f"|format(tour.precio_float) }} <span style="font-size: 1rem; color: #888;">USD</span>
+                </div>
+
+                {% if session.get('user_id') %}
+                {% if bought %}
+                <a href="/my-tour/{{ tour.id_tour }}" class="btn"
+                    style="width: 100%; background: #28a745; color: #fff; padding: 15px; display: block; text-align: center; text-decoration: none;">Start
+                    Tour</a>
+                {% elif active_sub %}
+                <div
+                    style="background: #f0faf4; border: 1px solid #28a745; color: #28a745; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; font-weight: bold;">
+                    <i class="fa-solid fa-check-circle"></i> Free with your Subscription
+                </div>
+                <form action="/claim-tour/{{ tour.id_tour }}" method="POST">
+                    <button type="submit" class="btn" style="width: 100%; padding: 15px; background: #0c2a4d;">Add to My
+                        Tours (Free)</button>
+                </form>
+                {% else %}
+                <a href="/add-to-cart/{{ tour.id_tour }}" class="btn"
+                    style="width: 100%; padding: 15px; display: block; text-align: center; text-decoration: none;">
+                    <i class="fa-solid fa-cart-shopping"></i> Add Tour to Cart
+                </a>
+                {% endif %}
+                {% else %}
+                <a href="/login" class="btn" style="width: 100%; padding: 15px;">Log in to Buy</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

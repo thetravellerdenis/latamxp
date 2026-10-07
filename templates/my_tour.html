@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+{% block title %}{{ tour.titulo }} — Interactive Guide{% endblock %}
+
+{% block content %}
+<style>
+    .player-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 40px;
+        align-items: start;
+        margin-top: 30px;
+    }
+
+    .step-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-left: 5px solid #fedd00;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        display: flex;
+        gap: 20px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .step-card:hover {
+        background: #f8f9fa;
+        transform: translateX(5px);
+    }
+
+    .step-card.active {
+        border-left-color: #28a745;
+        background: #f0faf4;
+    }
+
+    .step-number {
+        background: var(--navy);
+        color: #fedd00;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+        font-size: 1.2rem;
+    }
+
+    .step-time {
+        font-size: 0.85rem;
+        color: #c05621;
+        font-weight: bold;
+    }
+
+    .step-place {
+        color: var(--navy);
+        margin: 5px 0;
+        font-size: 1.2rem;
+    }
+
+    .step-desc {
+        color: #555;
+        margin: 0 0 5px 0;
+        font-size: 0.95rem;
+    }
+
+    .step-coords {
+        font-size: 0.8rem;
+        color: #888;
+        font-family: monospace;
+        background: #f4f4f4;
+        padding: 3px 6px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .audio-player {
+        background: #fff;
+        border: 2px solid #fedd00;
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .gps-panel {
+        background: #0c2a4d;
+        color: #fff;
+        padding: 25px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .gps-status {
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .gps-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ccc;
+        flex-shrink: 0;
+    }
+
+    .gps-dot.active {
+        background: #28a745;
+        animation: pulse 1.5s infinite;
+    }
+
+    .gps-dot.error {
+        background: #E63946;
+    }
+
+    @keyframes pulse {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.4;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .gps-coords {
+        font-family: monospace;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .distance-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .distance-list li {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        color: #aaa;
+    }
+
+    .distance-list li strong {
+        color: #fedd00;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked+.slider {
+        background-color: #fedd00;
+    }
+
+    input:checked+.slider:before {
+        transform: translateX(24px);
+    }
+
+    @media (max-width: 992px) {
+        .player-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="container" style="padding: 40px 0; max-width: 1100px;">
+    <a href="/dashboard" style="color: var(--navy); font-weight: 600; text-decoration: none;"><i
+            class="fa-solid fa-arrow-left"></i> Back to My Tours</a>
+
+    <div style="text-align: center; margin: 30px 0;">
+        <h1 style="font-size: 2.5rem; color: var(--navy); margin-bottom: 10px;">{{ tour.titulo }}</h1>
+        <p style="color: #666; font-size: 1.1rem;">Interactive Audio Guide • {{ tour.city }}, {{ tour.country }}</p>
+    </div>
+
+    <div class="player-layout">
+        <div>
+            <div class="audio-player">
+                <h3 style="color: var(--navy); margin-bottom: 10px;"><i class="fa-solid fa-headphones"
+                        style="color: #fedd00;"></i> Audio Guide</h3>
+                <h4 id="current-track-title" style="margin: 0 0 15px 0; color: #333;">Select a point to start</h4>
+
+                <audio id="audio-player" controls style="width: 100%; border-radius: 10px; display: none;"></audio>
+
+                <div style="margin-top: 15px; display: flex; gap: 15px; align-items: center;">
+                    <button onclick="document.getElementById('audio-player').play()" class="btn"
+                        style="padding: 10px 20px;"><i class="fa-solid fa-play"></i> Play</button>
+                    <button onclick="document.getElementById('audio-player').pause()" class="btn-outline--dark"
+                        style="padding: 10px 20px; border-radius: 10px;"><i class="fa-solid fa-pause"></i>
+                        Pause</button>
+                </div>
+            </div>
+
+            <h3 style="color: var(--navy); margin: 30px 0 20px 0;">Your Itinerary</h3>
+
+            {% for item in itinerary_data %}
+            <div class="step-card" id="step-{{ loop.index0 }}" onclick="selectPoint({{ loop.index0 }})">
+                <div class="step-number">{{ loop.index }}</div>
+                <div style="flex: 1;">
+                    <span class="step-time">{{ item.time }} • Day {{ item.day }}</span>
+                    <h4 class="step-place">{{ item.place }}</h4>
+                    <p class="step-desc">{{ item.desc }}</p>
+                    <span class="step-coords" id="coords-{{ loop.index0 }}">No GPS coords</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="position: sticky; top: 100px;">
+            <div class="gps-panel">
+                <div class="gps-status">
+                    <div id="gps-dot" class="gps-dot"></div>
+                    <span id="gps-text">Waiting for GPS...</span>
+                </div>
+
+                <div class="gps-coords" id="user-coords">
+                    Lat: -- , Lng: --
+                </div>
+
+                <button onclick="simulateGPS()" class="btn"
+                    style="width: 100%; margin-bottom: 20px; padding: 10px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-satellite-dish"></i> Test Auto-Play (Simulate)
+                </button>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span style="font-weight: 600; font-size: 0.9rem;">Auto-play (< 50m)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="autoplay-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                </div>
+
+                <h4
+                    style="font-size: 0.9rem; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                    Live Distances</h4>
+                <ul class="distance-list" id="distance-list"></ul>
+            </div>
+
+            <a href="/download/{{ tour.id_tour }}" class="btn-outline--dark"
+                style="padding: 15px; border-radius: 15px; font-weight: 600; cursor: pointer; border-width: 2px; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; width: 100%;">
+                <i class="fa-solid fa-download"></i> Download Offline
+            </a>
+        </div>
+    </div>
+</section>
+
+<script>
+    // ЖЕЛЕЗОБЕТОННЫЕ ДАННЫЕ ИЗ ПИТОНА
+    const pois = {{ pois_data| tojson | safe }};
+    const audios = {{ audios_data| tojson | safe }};
+
+    let currentPoiIndex = -1;
+    let userLat = null;
+    let userLng = null;
+
+    // 1. Привязка координат к шагам (строго по индексу)
+    function initUI() {
+        const distList = document.getElementById('distance-list');
+
+        pois.forEach((poi, index) => {
+            // Показываем координаты в шаге
+            const coordsSpan = document.getElementById('coords-' + index);
+            if (coordsSpan) {
+                coordsSpan.innerText = `📍 Lat: ${poi.lat.toFixed(4)}, Lng: ${poi.lng.toFixed(4)}`;
+            }
+
+            // Заполняем правую панель
+            const li = document.createElement('li');
+            li.id = 'dist-' + index;
+            li.innerHTML = `<span>${poi.nombre}</span> <strong>-- m</strong>`;
+            distList.appendChild(li);
+        });
+    }
+    initUI();
+
+    // 2. Переключение
+    function selectPoint(index) {
+        document.querySelectorAll('.step-card').forEach(el => el.classList.remove('active'));
+        const stepCard = document.getElementById('step-' + index);
+        if (stepCard) {
+            stepCard.classList.add('active');
+            stepCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Включение аудио
+        if (audios.length > 0) {
+            const track = audios[index % audios.length];
+            const player = document.getElementById('audio-player');
+            player.src = track.url;
+            player.style.display = 'block';
+            document.getElementById('current-track-title').innerText = track.titulo;
+
+            if (document.getElementById('autoplay-toggle').checked) {
+                player.play().catch(e => console.log("Autoplay blocked:", e));
+            }
+        }
+        currentPoiIndex = index;
+    }
+
+    // 3. Симуляция GPS
+    function simulateGPS() {
+        if (pois.length > 0) {
+            userLat = pois[0].lat;
+            userLng = pois[0].lng;
+
+            document.getElementById('gps-dot').className = 'gps-dot active';
+            document.getElementById('gps-text').style.color = '#28a745';
+            document.getElementById('gps-text').innerText = `Simulated GPS Active`;
+            document.getElementById('user-coords').innerText = `Lat: ${userLat.toFixed(5)} , Lng: ${userLng.toFixed(5)}`;
+
+            updateDistances();
+            if (document.getElementById('autoplay-toggle').checked) checkNearbyPois();
+        } else {
+            alert("No points in database.");
+        }
+    }
+
+    // 4. Реальный GPS
+    if ("geolocation" in navigator) {
+        navigator.geolocation.watchPosition(
+            (position) => {
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+
+                document.getElementById('gps-dot').className = 'gps-dot active';
+                document.getElementById('gps-text').style.color = '#28a745';
+                document.getElementById('gps-text').innerText = `GPS Active`;
+                document.getElementById('user-coords').innerText = `Lat: ${userLat.toFixed(5)} , Lng: ${userLng.toFixed(5)}`;
+
+                updateDistances();
+                if (document.getElementById('autoplay-toggle').checked) checkNearbyPois();
+            },
+            (error) => {
+                document.getElementById('gps-dot').className = 'gps-dot error';
+                document.getElementById('gps-text').style.color = '#E63946';
+                document.getElementById('gps-text').innerText = "GPS denied. Use Test button.";
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    }
+
+    // 5. Обновление расстояний
+    function updateDistances() {
+        if (!userLat || !userLng) return;
+
+        pois.forEach((poi, index) => {
+            const dist = getDistance(userLat, userLng, poi.lat, poi.lng);
+            const el = document.getElementById('dist-' + index);
+            if (el) {
+                const color = dist < 50 ? '#28a745' : '#fedd00';
+                el.innerHTML = `<span>${poi.nombre}</span> <strong style="color:${color}">${dist.toFixed(0)} m</strong>`;
+            }
+        });
+    }
+
+    // 6. Автоплей
+    function checkNearbyPois() {
+        if (!userLat || !userLng || !pois.length) return;
+        pois.forEach((poi, index) => {
+            const dist = getDistance(userLat, userLng, poi.lat, poi.lng);
+            if (dist < 50 && currentPoiIndex !== index) {
+                selectPoint(index);
+            }
+        });
+    }
+
+    // 7. Расчет метров
+    function getDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))) * 1000;
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="container" style="padding: 60px 0;">
+    <h1 class="ba-tours__title" style="text-align: left;">Travel Blog</h1>
+    <div class="ba-tours__grid" style="margin-top: 30px;">
+        {% for post in posts %}
+        <a href="/blog/{{ post.id }}" style="text-decoration: none; color: inherit;">
+            <article class="ba-tour-card">
+                <img src="{{ post.image_url }}" style="width: 100%; height: 200px; object-fit: cover;">
+                <div style="padding: 20px;">
+                    <h3 style="color: #0c2a4d; margin-bottom: 10px;">{{ post.title }}</h3>
+                    <span class="btn-details">Read Article</span>
+                </div>
+            </article>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
