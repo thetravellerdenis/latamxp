@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="ba-tours" style="padding-top: 60px;">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h1 class="ba-tours__title">All Destinations</h1>
+            <p style="color: #555; font-size: 1.1rem; line-height: 1.6;">Select a country to discover its cities and
+                immersive audio tours. From the vibrant streets of Buenos Aires to the stunning beaches of Rio, your
+                adventure starts here.</p>
+        </div>
+        <div class="ba-tours__grid">
+            {% for country, flag in countries %}
+            <a href="/country/{{ country }}" style="text-decoration: none; color: inherit;">
+                <article class="ba-tour-card" style="text-align: center; padding: 30px 20px;">
+                    <img src="{{ flag }}" style="width: 100px; margin-bottom: 20px; border-radius: 8px;">
+                    <h3 style="font-size: 1.4rem; color: #0c2a4d;">{{ country }}</h3>
+                </article>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ country }} — LatamXP{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0;">
+    <!-- Шапка страны -->
+    <div
+        style="display: flex; align-items: center; gap: 30px; margin-bottom: 50px; background: #fff; padding: 30px; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+        <img src="{{ flag }}" alt="{{ country }}"
+            style="width: 120px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+        <div>
+            <h1 style="font-size: 3rem; color: var(--navy); margin-bottom: 10px;">{{ country }}</h1>
+            <p style="font-size: 1.1rem; color: #555; margin: 0;">Select a city below to explore available tours.</p>
+        </div>
+    </div>
+
+    <!-- Сетка городов -->
+    <h2 class="ba-tours__title" style="text-align: left; margin-bottom: 30px;">Cities in {{ country }}</h2>
+
+    <div class="ba-tours__grid">
+        {% for city_name, city_desc in cities.items() %}
+        <a href="/city/{{ city_name }}" style="text-decoration: none; color: inherit;">
+            <article class="ba-tour-card" style="padding: 30px; height: 100%;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                    <h3 style="font-size: 1.5rem; color: var(--navy); margin: 0;">{{ city_name }}</h3>
+                    <i class="fa-solid fa-city" style="color: #FEDD00; font-size: 1.5rem;"></i>
+                </div>
+                <p style="color: #666; font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                    {{ city_desc }}
+                </p>
+                <span class="btn-details" style="align-self: flex-start;">View Tours <i
+                        class="fa-solid fa-arrow-right"></i></span>
+            </article>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Register — LatamXP{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0; display: flex; justify-content: center;">
+
+    <div
+        style="background: #fff; padding: 40px; border-radius: 18px; box-shadow: 0 15px 40px rgba(12,42,77,0.1); width: 100%; max-width: 480px;">
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <a href="/" style="text-decoration: none;">
+                <span style="font-size: 2rem; font-weight: 800; color: var(--navy);">Latam<span
+                        style="color: #FEDD00;">XP</span></span>
+            </a>
+            <h2 style="font-size: 1.5rem; color: #555; margin-top: 15px;">Create your account</h2>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert error" style="margin-bottom: 20px; font-size: 0.9rem; padding: 10px 15px;">
+            <i class="fa-solid fa-circle-exclamation"></i> {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" onsubmit="return validateForm()">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="nombre" required placeholder="John Doe" minlength="2">
+            </div>
+
+            <div class="form-group">
+                <label>Email address</label>
+                <input type="email" name="email" required placeholder="tu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" name="password" required placeholder="Min 8 characters"
+                    minlength="8">
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="confirm_password" required placeholder="Repeat password" minlength="8">
+                <span id="password-error"
+                    style="color: red; font-size: 0.85rem; display: none; margin-top: 5px;">Passwords do not
+                    match.</span>
+            </div>
+
+            <div class="form-group">
+                <label>Preferred Language</label>
+                <select name="idioma" required
+                    style="width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; font-family: 'Raleway'; outline: none; cursor: pointer;">
+                    <option value="en">English</option>
+                    <option value="es" selected>Español</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
+
+            <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 25px;">
+                <input type="checkbox" id="terms" required
+                    style="width: 18px; height: 18px; margin-top: 3px; accent-color: #FEDD00; cursor: pointer;">
+                <label for="terms"
+                    style="font-size: 0.9rem; color: #555; font-weight: 400; cursor: pointer; line-height: 1.4;">
+                    I agree to the <a href="#" style="color: #c05621; font-weight: 600; text-decoration: none;">Terms
+                        and Conditions</a>
+                </label>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; padding: 14px; font-size: 1.1rem;">
+                Create Account
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 25px; font-size: 0.95rem; color: #666;">
+            Already have an account? <a href="/login"
+                style="color: #c05621; font-weight: 700; text-decoration: none;">Log in</a>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    function validateForm() {
+        var pass = document.getElementById("password").value;
+        var confirm = document.getElementById("confirm_password").value;
+        var errorMsg = document.getElementById("password-error");
+
+        if (pass !== confirm) {
+            errorMsg.style.display = "block";
+            return false;
+        }
+        errorMsg.style.display = "none";
+        return true;
+    }
+</script>
+{% endblock %}

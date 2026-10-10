@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Free Latin America Guide — LatamXP{% endblock %}
+
+{% block content %}
+<section
+    style="background: linear-gradient(135deg, #0c2a4d 0%, #1a4d8c 100%); padding: 80px 0; color: white; position: relative; overflow: hidden;">
+    <div
+        style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(254,221,0,0.1); border-radius: 50%;">
+    </div>
+    <div
+        style="position: absolute; bottom: -100px; left: -50px; width: 300px; height: 300px; background: rgba(116,172,223,0.1); border-radius: 50%;">
+    </div>
+
+    <div class="container" style="position: relative; z-index: 2; text-align: center; max-width: 800px;">
+        <span class="ba-tour-card__tag"
+            style="position: static; margin-bottom: 20px; display: inline-block; background: #fedd00;">100% Free</span>
+        <h1
+            style="font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; line-height: 1.1; color: #fff !important; text-shadow: 2px 2px 10px rgba(0,0,0,0.3);">
+            The Ultimate Latin America Survival Guide</h1>
+        <p style="font-size: 1.2rem; color: #ddd !important; margin-bottom: 40px;">Everything you need to know about SIM
+            cards, transport, safety, local food, and basic Spanish to start your trip like a pro.</p>
+
+        <a href="/download-guide" class="btn"
+            style="padding: 18px 40px; font-size: 1.2rem; box-shadow: 0 10px 25px rgba(254,221,0,0.3);">
+            <i class="fa-solid fa-file-pdf"></i> Download Full PDF Guide
+        </a>
+    </div>
+</section>
+
+<section class="container" style="padding: 80px 0;">
+    <div class="ba-tours__grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+        <div class="ba-tour-card" style="padding: 30px; background: #fff;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(254,221,0,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-sim-card" style="font-size: 1.8rem; color: #c05621;"></i>
+            </div>
+            <h3 style="color: var(--navy); font-size: 1.4rem; margin-bottom: 15px;">SIM Cards & Internet</h3>
+            <p style="color: #666; line-height: 1.6; font-size: 0.95rem;">How to buy a local SIM card in different
+                countries, why eSIM is a lifesaver, and avoiding roaming charges across borders.</p>
+        </div>
+
+        <div class="ba-tour-card" style="padding: 30px; background: #fff;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(116,172,223,0.2); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-bus" style="font-size: 1.8rem; color: var(--navy);"></i>
+            </div>
+            <h3 style="color: var(--navy); font-size: 1.4rem; margin-bottom: 15px;">Transport & Apps</h3>
+            <p style="color: #666; line-height: 1.6; font-size: 0.95rem;">The best apps for buses and metros (like
+                Cabify, Uber, Moovit), how to use local transport cards, and avoiding taxi scams.</p>
+        </div>
+
+        <div class="ba-tour-card" style="padding: 30px; background: #fff;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(40,167,69,0.1); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-shield-halved" style="font-size: 1.8rem; color: #28a745;"></i>
+            </div>
+            <h3 style="color: var(--navy); font-size: 1.4rem; margin-bottom: 15px;">Safety & Neighborhoods</h3>
+            <p style="color: #666; line-height: 1.6; font-size: 0.95rem;">General safety rules for Latin America: where
+                to walk at night, how to keep your phone safe, and which neighborhoods to avoid.</p>
+        </div>
+
+        <div class="ba-tour-card" style="padding: 30px; background: #fff;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(230,57,70,0.1); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-language" style="font-size: 1.8rem; color: #E63946;"></i>
+            </div>
+            <h3 style="color: var(--navy); font-size: 1.4rem; margin-bottom: 15px;">Basic Spanish</h3>
+            <p style="color: #666; line-height: 1.6; font-size: 0.95rem;">The essential phrases for ordering food,
+                asking for directions, and negotiating. We include differences between Latin American slang.</p>
+        </div>
+
+        <div class="ba-tour-card" style="padding: 30px; background: #fff;">
+            <div
+                style="width: 60px; height: 60px; background: rgba(192,86,33,0.1); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-utensils" style="font-size: 1.8rem; color: #c05621;"></i>
+            </div>
+            <h3 style="color: var(--navy); font-size: 1.4rem; margin-bottom: 15px;">Food & Tipping</h3>
+            <p style="color: #666; line-height: 1.6; font-size: 0.95rem;">What to eat in different countries (Asado,
+                Tacos, Ceviche), how much to tip, and what "la cuenta, por favor" means.</p>
+        </div>
+    </div>
+</section>
+
+<section style="background: #f8f9fa; padding: 80px 0; border-top: 1px solid #eee;">
+    <div class="container" style="text-align: center;">
+        <h2 style="font-size: 2.5rem; color: var(--navy); margin-bottom: 20px;">Ready to explore?</h2>
+        <p
+            style="color: #666; font-size: 1.1rem; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
+            After reading the guide, try our free 15-minute demo tour to see how our audio guides work before you buy!
+        </p>
+        <a href="/city/Buenos Aires" class="btn-outline--dark"
+            style="padding: 15px 40px; font-size: 1.1rem; border-radius: 15px; display: inline-block; text-decoration: none;">
+            <i class="fa-solid fa-headphones"></i> Try the Demo Tour
+        </a>
+    </div>
+</section>
+{% endblock %}
