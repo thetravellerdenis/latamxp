@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Search Results — LatamXP{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0; min-height: 60vh;">
+    <h1 class="ba-tours__title" style="text-align: left; margin-bottom: 30px;">
+        Search Results for "{{ query }}"
+    </h1>
+    <p style="color: #666; margin-bottom: 40px;">Found {{ tours|length }} tours matching your search.</p>
+
+    {% if tours %}
+    <div class="ba-tours__grid">
+        {% for tour in tours %}
+        <article class="ba-tour-card">
+            <div class="ba-tour-card__img">
+                <img src="{{ tour.portada_url }}" alt="{{ tour.titulo }}">
+                <span class="ba-tour-card__tag">{{ tour.categoria }}</span>
+            </div>
+            <div class="ba-tour-card__body">
+                <h3>{{ tour.titulo }}</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">{{ tour.city }}, {{ tour.country }}</p>
+
+                <div
+                    style="display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: #666; margin-bottom: 15px;">
+                    <i class="fa-regular fa-clock" style="color: var(--sun-yellow);"></i>
+                    <span>{{ tour.duracion_minutos }} mins</span>
+                </div>
+
+                <div class="ba-tour-card__bottom">
+                    <div class="ba-tour-card__price">
+                        <span class="price-value">${{ "%.2f"|format(tour.precio_float) }}</span>
+                    </div>
+                    <a href="/tour/{{ tour.id_tour }}" class="btn-details">View Tour</a>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div
+        style="text-align: center; padding: 60px 20px; background: #fff; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.05);">
+        <i class="fa-solid fa-magnifying-glass" style="font-size: 4rem; color: #ccc; margin-bottom: 20px;"></i>
+        <h2 style="color: var(--navy); margin-bottom: 10px;">No results found</h2>
+        <p style="color: #666; margin-bottom: 25px;">We couldn't find anything for "{{ query }}". Try a different
+            keyword.</p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}зн

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LatamXP{% endblock %}</title>
+
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Иконки (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+    <!-- Твои стили -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: #0c2a4d;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-weight: 600;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .nav-search-form {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 5px 15px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-search-form:focus-within {
+            background: white;
+            border-color: white;
+        }
+
+        .nav-search-form input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 150px;
+            font-size: 0.9rem;
+            font-family: 'Raleway';
+        }
+
+        .nav-search-form input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-search-form:focus-within input {
+            color: var(--navy);
+        }
+
+        .nav-search-form:focus-within input::placeholder {
+            color: #999;
+        }
+
+        .nav-search-form button {
+            background: none;
+            border: none;
+            color: #FEDD00;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1rem;
+        }
+
+        .nav-search-form:focus-within button {
+            color: var(--navy);
+        }
+
+        @media (max-width: 1200px) {
+            .nav-search-form input {
+                width: 100px;
+            }
+        }
+
+        .cart-icon {
+            position: relative;
+            color: white;
+            font-size: 1.2rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #FEDD00;
+            color: #0c2a4d;
+            font-size: 0.7rem;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav id="mainNav">
+        <div class="container nav-shell" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" class="navbar-brand" style="text-decoration: none;">
+                <span style="font-size: 1.6rem; font-weight: 800; color: #fff;">Latam<span
+                        style="color: #FEDD00;">XP</span></span>
+            </a>
+
+            <form action="/search" method="GET" class="nav-search-form">
+                <input type="text" name="q" placeholder="Search tours...">
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div
+                    style="display: flex; gap: 5px; color: white; font-size: 0.85rem; font-weight: bold; border-right: 1px solid rgba(255,255,255,0.3); padding-right: 15px;">
+                    <a href="#" style="color: #FEDD00; text-decoration: none;">ES</a>
+                    <span style="opacity: 0.5;">/</span>
+                    <a href="#" style="color: white; text-decoration: none; opacity: 0.7;">EN</a>
+                    <span style="opacity: 0.5;">/</span>
+                    <a href="#" style="color: white; text-decoration: none; opacity: 0.7;">RU</a>
+                </div>
+
+                <a href="/checkout" class="cart-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    {% if session.get('cart') and session['cart']|length > 0 %}
+                    <span class="cart-badge">{{ session['cart']|length }}</span>
+                    {% endif %}
+                </a>
+
+                <div class="dropdown">
+                    <a href="/countries" class="nav-link" style="color: #fff; text-decoration: none;">Countries <i
+                            class="fa-solid fa-chevron-down" style="font-size: 0.8rem;"></i></a>
+                    <div class="dropdown-content">
+                        <a href="/country/Argentina">Argentina</a>
+                        <a href="/country/Brazil">Brazil</a>
+                        <a href="/country/Mexico">Mexico</a>
+                        <a href="/country/Colombia">Colombia</a>
+                        <a href="/countries" style="color: #c05621;">View All...</a>
+                    </div>
+                </div>
+                <a href="/free-guide" class="nav-link" style="color: #fff; text-decoration: none;">Free Guide</a>
+                <a href="/about" class="nav-link" style="color: #fff; text-decoration: none;">About</a>
+                <a href="/blog" class="nav-link" style="color: #fff; text-decoration: none;">Blog</a>
+
+                {% if session.get('user_id') %}
+                <a href="/dashboard" style="color: #fedd00; text-decoration: none; font-weight: 700;">My Tours</a>
+                <a href="/logout" class="btn-custom"
+                    style="background: transparent; border: 2px solid #FFD700; color: #FFD700; text-decoration: none;">Logout</a>
+                {% else %}
+                <a href="/login" class="nav-link" style="color: #fff; text-decoration: none;">Login</a>
+                <a href="/registro" class="btn-custom" style="text-decoration: none;">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>LatamXP</h3>
+                    <p>Discover Latin America at your own pace. Audio guides, interactive maps and unique experiences.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h3>Destinations</h3>
+                    <ul class="footer-links">
+                        <li><a href="/country/Argentina">Argentina</a></li>
+                        <li><a href="/country/Brazil">Brazil</a></li>
+                        <li><a href="/country/Mexico">Mexico</a></li>
+                        <li><a href="/country/Peru">Peru</a></li>
+                        <li><a href="/country/Chile">Chile</a></li>
+                        <li><a href="/countries">View all countries</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="/free-guide">Free Guide</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Follow Us</h3>
+                    <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 1.5rem;">
+                        <a href="#" style="color: #FEDD00;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="color: #FEDD00;"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#" style="color: #FEDD00;"><i class="fa-brands fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 LatamXP. Created by Denis Miroshnichenko. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

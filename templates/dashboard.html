@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}My Tours — LatamXP{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0; min-height: 70vh;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div>
+            <h1 class="ba-tours__title" style="text-align: left; margin-bottom: 5px;">My Tours</h1>
+            <p style="color: #666; margin: 0;">Welcome back, {{ session.get('user_name') }}!</p>
+        </div>
+    </div>
+
+    {% if suscripcion and suscripcion.is_active %}
+    <div
+        style="background: #0c2a4d; color: white; padding: 30px; border-radius: 18px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border: 2px solid #fedd00;">
+        <div>
+            <h2 style="color: #fedd00; font-size: 1.5rem; margin-bottom: 10px;">
+                <i class="fa-solid fa-star"></i> Premium Subscription Active
+            </h2>
+            <p style="margin: 0; font-size: 1.1rem;">Ends on {{ suscripcion.fecha_fin.strftime('%B %d, %Y') }}. You can
+                claim any tour for free!</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="/countries" class="btn" style="padding: 12px 25px; border-radius: 10px;">Explore Catalog</a>
+            <form action="/cancel-subscription" method="POST">
+                <button type="submit" class="btn-outline--dark"
+                    style="padding: 12px 25px; border-radius: 10px; border-color: #E63946; color: #E63946; background: transparent;">Cancel</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div
+        style="background: linear-gradient(135deg, #f8f9fa 0%, #eef4fb 100%); padding: 30px; border-radius: 18px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-left: 5px solid #74acdf;">
+        <div>
+            <h2 style="color: #0c2a4d; font-size: 1.3rem; margin-bottom: 5px;">Unlock all tours!</h2>
+            <p style="color: #666; margin: 0;">Get unlimited access to all current and future tours for 30 days.</p>
+        </div>
+        <a href="/add-to-cart/subscription" class="btn" style="padding: 12px 25px; border-radius: 10px;">Subscribe for
+            $25</a>
+    </div>
+    {% endif %}
+
+    {% if pedidos %}
+    <div class="ba-tours__grid" id="tours-grid">
+        {% for pedido in pedidos %}
+        {% set is_downloaded = pedido.tour.id_tour in downloaded_tour_ids %}
+        {% set has_review = pedido.tour.id_tour in reviewed_tour_ids %}
+
+        <article class="ba-tour-card tour-item" data-downloaded="{{ 'true' if is_downloaded else 'false' }}">
+            <div class="ba-tour-card__img">
+                <!-- ДОБАВЛЕН FALLBACK ДЛЯ КАРТИНОК (если не грузится, будет серый фон) -->
+                <img src="{{ pedido.tour.portada_url }}" alt="{{ pedido.tour.titulo }}"
+                    onerror="this.src='https://placehold.co/600x400?text=No+Image';">
+                <span class="ba-tour-card__tag"
+                    style="background: {{ '#28a745' if is_downloaded else '#fedd00' }}; color: {{ 'white' if is_downloaded else '#0c2a4d' }};">
+                    {{ 'Downloaded' if is_downloaded else 'In Library' }}
+                </span>
+            </div>
+            <div class="ba-tour-card__body">
+                <h3 style="margin-bottom: 5px;">{{ pedido.tour.titulo }}</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">{{ pedido.tour.city }}, {{
+                    pedido.tour.country }}</p>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto;">
+                    <a href="/my-tour/{{ pedido.tour.id_tour }}" class="btn"
+                        style="text-align: center; display: block; padding: 12px;">
+                        <i class="fa-solid fa-headphones"></i> Start Tour
+                    </a>
+
+                    {% if is_downloaded %}
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-outline--dark"
+                            style="flex: 1; padding: 10px; border-radius: 10px; font-size: 0.9rem; cursor: not-allowed; opacity: 0.6;"
+                            disabled>
+                            <i class="fa-solid fa-check"></i> Downloaded
+                        </button>
+                        <a href="/delete-download/{{ pedido.tour.id_tour }}" class="btn-outline--dark"
+                            style="padding: 10px; border-radius: 10px; color: #E63946; border-color: #E63946; text-decoration: none;"
+                            title="Delete Download">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </div>
+                    {% else %}
+                    <a href="/download/{{ pedido.tour.id_tour }}" class="btn-outline--dark"
+                        style="text-align: center; display: block; padding: 10px; border-radius: 10px; font-size: 0.9rem; text-decoration: none;">
+                        <i class="fa-solid fa-download"></i> Download Audio
+                    </a>
+                    {% endif %}
+
+                    <button onclick="openReviewModal({{ pedido.tour.id_tour }}, '{{ pedido.tour.titulo }}')"
+                        class="btn-details"
+                        style="text-align: center; display: block; padding: 10px; border-radius: 10px; background: {{ '#0c2a4d' if has_review else '#fedd00' }}; color: {{ 'white' if has_review else '#0c2a4d' }};">
+                        <i class="fa-solid fa-star"></i> {{ 'Edit Review' if has_review else 'Leave Review' }}
+                    </button>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div
+        style="text-align: center; padding: 80px 20px; background: #fff; border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.05);">
+        <i class="fa-solid fa-ticket-simple" style="font-size: 4rem; color: #ccc; margin-bottom: 20px;"></i>
+        <h2 style="color: var(--navy); margin-bottom: 10px;">Your library is empty</h2>
+        <p style="color: #666; margin-bottom: 25px;">You haven't added any tours yet. Go to the catalog to find your
+            first adventure!</p>
+        <a href="/countries" class="btn">Go to Catalog</a>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Модальное окно для отзыва -->
+<div id="reviewModal"
+    style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+    <div style="background: #fff; padding: 40px; border-radius: 18px; width: 90%; max-width: 500px;">
+        <h3 style="color: var(--navy); margin-bottom: 20px;">Review: <span id="review-tour-title"></span></h3>
+        <form id="review-form" method="POST" action="">
+            <div class="form-group">
+                <label>Rating</label>
+                <select name="puntuacion" required
+                    style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                    <option value="4">⭐⭐⭐⭐ (Good)</option>
+                    <option value="3">⭐⭐⭐ (Average)</option>
+                    <option value="2">⭐⭐ (Poor)</option>
+                    <option value="1">⭐ (Terrible)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Comment</label>
+                <textarea name="comentario" required
+                    style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; height: 100px; resize: none; font-family: 'Raleway';"></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn" style="flex: 1;">Submit</button>
+                <button type="button" onclick="document.getElementById('reviewModal').style.display='none'"
+                    class="btn-outline--dark" style="flex: 1; border-radius: 15px;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openReviewModal(tourId, tourTitle) {
+        document.getElementById('review-tour-title').innerText = tourTitle;
+        document.getElementById('review-form').action = '/add-review/' + tourId;
+        document.getElementById('reviewModal').style.display = 'flex';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Checkout — LatamXP{% endblock %}
+
+{% block content %}
+<section class="container" style="padding: 60px 0;">
+    <h1 class="ba-tours__title" style="text-align: left; margin-bottom: 40px;">Checkout</h1>
+
+    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px;">
+        <div>
+            <div
+                style="background: #fff; border-radius: 18px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">Your Selection ({{ count }} items)</h3>
+
+                {% if has_subscription %}
+                <div
+                    style="display: flex; gap: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
+                    <div
+                        style="width: 120px; height: 80px; background: #fedd00; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-star" style="font-size: 2rem; color: #0c2a4d;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="color: var(--navy); margin: 0 0 5px 0;">LatamXP Premium Subscription</h4>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0;">Unlimited access to all tours for 30 days
+                        </p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; color: var(--navy); font-size: 1.2rem;">$25.00</div>
+                        <a href="/remove-from-cart/subscription"
+                            style="color: #E63946; font-size: 0.85rem; text-decoration: none; margin-top: 10px; display: inline-block;"><i
+                                class="fa-solid fa-trash"></i> Remove</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% for tour in tours %}
+                <div
+                    style="display: flex; gap: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
+                    <img src="{{ tour.portada_url }}"
+                        style="width: 120px; height: 80px; object-fit: cover; border-radius: 10px;">
+                    <div style="flex: 1;">
+                        <h4 style="color: var(--navy); margin: 0 0 5px 0;">{{ tour.titulo }}</h4>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0;">{{ tour.city }}, {{ tour.country }}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; color: var(--navy); font-size: 1.2rem;">${{
+                            "%.2f"|format(tour.precio_float) }}</div>
+                        <a href="/remove-from-cart/{{ tour.id_tour }}"
+                            style="color: #E63946; font-size: 0.85rem; text-decoration: none; margin-top: 10px; display: inline-block;"><i
+                                class="fa-solid fa-trash"></i> Remove</a>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div
+                    style="margin-top: 20px; background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid #fedd00;">
+                    <p style="margin: 0; color: #555; font-size: 0.9rem;"><i class="fa-solid fa-gift"
+                            style="color: #c05621;"></i> <strong>Bundle Discount:</strong> If you buy 3 or more tours,
+                        you get 20% off automatically!</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div
+                style="background: #f8f9fa; border: 2px solid #fedd00; padding: 30px; border-radius: 18px; position: sticky; top: 100px;">
+                <h3 style="color: var(--navy); margin-bottom: 20px;">Payment Method</h3>
+
+                <form action="/process-payment" method="POST">
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: flex; align-items: center; gap: 10px; padding: 15px; background: #fff; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; margin-bottom: 10px;">
+                            <input type="radio" name="payment_method" value="MercadoPago" checked
+                                style="accent-color: #fedd00; width: 18px; height: 18px;">
+                            <span style="font-weight: 600; color: var(--navy);">MercadoPago</span>
+                        </label>
+                        <label
+                            style="display: flex; align-items: center; gap: 10px; padding: 15px; background: #fff; border-radius: 10px; border: 1px solid #ddd; cursor: pointer;">
+                            <input type="radio" name="payment_method" value="Stripe"
+                                style="accent-color: #fedd00; width: 18px; height: 18px;">
+                            <span style="font-weight: 600; color: var(--navy);">Stripe (Credit Card)</span>
+                        </label>
+                    </div>
+
+                    <div
+                        style="background: #fff; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 20px;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #555;">Card Number</label>
+                        <input type="text" placeholder="0000 0000 0000 0000"
+                            style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #555;">Expiry</label>
+                                <input type="text" placeholder="MM/YY"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="font-size: 0.85rem; font-weight: 600; color: #555;">CVV</label>
+                                <input type="text" placeholder="123"
+                                    style="width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid #ddd; padding-top: 20px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #666;">
+                            <span>Subtotal</span>
+                            <span>${{ "%.2f"|format(total) }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: #666;">
+                            <span>Taxes & Fees</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 1.5rem; font-weight: 800; color: var(--navy); margin-top: 15px;">
+                            <span>Total</span>
+                            <span>${{ "%.2f"|format(total) }} <span
+                                    style="font-size: 1rem; color: #888;">USD</span></span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn" style="width: 100%; padding: 15px; font-size: 1.1rem;">Confirm
+                        Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
