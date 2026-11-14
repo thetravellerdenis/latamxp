@@ -385,17 +385,50 @@ with app.app_context():
 
     post1 = BlogPost(
         title="Top 10 Hidden Gems in Buenos Aires",
-        content="Secret spots you must visit in the vibrant capital of Argentina.",
+        content="""
+        Buenos Aires is a city that rewards those who wander off the beaten path. While the Obelisco and Casa Rosada are must-sees, the true soul of the city lies in its hidden corners. 
+        
+        Start with the 'Librería El Ateneo Grand Splendid' in Recoleta, an opulent theater converted into a breathtaking bookstore. Then, head to the 'Barrio de Palermo' to find hidden 'Puertas Cerradas' (closed-door restaurants) where local chefs serve gourmet meals in intimate settings. 
+        
+        Don't miss the 'Jardín Japonés', a peaceful oasis amidst the concrete jungle. For tango lovers, avoid the tourist traps in San Telmo and instead visit 'La Catedral Club', an underground milonga that feels like a secret society. 
+        
+        Finally, explore the street art in the hidden alleys of Barracas. The city reveals its magic when you get lost in its history.
+        """,
         image_url="https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=600",
-        date=datetime.now(),
+        date=datetime(2026, 11, 10),
     )
+
     post2 = BlogPost(
         title="Guide to Rio's Best Beaches",
-        content="From Copacabana to Ipanema: where to go and what to avoid.",
+        content="""
+        Rio de Janeiro is synonymous with sun, sand, and samba. With over 70 beaches, choosing the right one can be overwhelming.
+        
+        Copacabana is the most famous, with its iconic black and white wave mosaic. It's vibrant but crowded. For a more upscale and safer experience, head to Ipanema or Leblon, where the locals hang out. The 'Posto 9' in Ipanema is legendary for its bohemian crowd.
+        
+        If you want to escape the city noise, try 'Prainha', a hidden gem located further south, surrounded by lush mountains. It's a favorite among surfers. 
+        
+        Safety tip: Always bring only what you need. Leave your phone and expensive jewelry at the hotel. Instead, bring some cash for a refreshing 'Água de Coco' (coconut water) from the local vendors. Embrace the 'Carioca' spirit and enjoy the sunset at Arpoador beach!
+        """,
         image_url="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600",
-        date=datetime.now(),
+        date=datetime(2026, 11, 12),
     )
-    db.session.add_all([post1, post2])
+
+    post3 = BlogPost(
+        title="The Ultimate Guide to Argentine Asado",
+        content="""
+        An 'Asado' is not just a barbecue; it is a sacred ritual, a social event, and the backbone of Argentine cuisine. 
+        
+        The secret lies in the fire. A true 'Asador' (grill master) uses wood or charcoal to create hot embers, never exposing the meat directly to the flame. The cuts you must try include 'Asado de Tira' (short ribs), 'Vacío' (flank steak), and 'Chorizo' (sausage). 
+        
+        Before the meat, you'll be served 'Provoleta' (grilled provolone cheese) and 'Chimichurri' (a vibrant sauce made of parsley, garlic, vinegar, and oil). 
+        
+        The golden rule of the Asado is patience. It takes hours to prepare, and it is meant to be enjoyed slowly with good wine (Malbec is the perfect pairing) and great conversation. Never rush an Asado; it is the ultimate expression of Argentine hospitality.
+        """,
+        image_url="https://images.unsplash.com/photo-1558030006-450675393462?w=600",
+        date=datetime(2026, 11, 14),
+    )
+
+    db.session.add_all([post1, post2, post3])
 
     db.session.commit()
     print("✅ DB ready. User: test@test.com / 12345")
