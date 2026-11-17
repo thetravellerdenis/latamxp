@@ -16,20 +16,612 @@ with app.app_context():
     db.session.add(test_user)
     db.session.flush()
 
-    data = [
+    # =====================================================================
+    # BUENOS AIRES — 5 routes
+    # =====================================================================
+    buenos_aires_routes = [
         {
             "c": "Argentina",
             "f": "ar",
             "city": "Buenos Aires",
-            "desc": "The vibrant capital of Argentina, known for its European-style architecture, tango, and passionate culture.",
+            "desc": "The vibrant capital of Argentina, known for its European-style architecture, tango, passionate culture, and strong local food traditions.",
             "img": "photo-1589909202802-8f4aadce1849",
-            "t": "City Center & History",
+            "t": "La Boca & San Telmo: History, Language, Food",
+            "cat": "history",
+            "coords": "-34.6345,-58.3633",
+            "descripcion": "Two souls of Buenos Aires: the colorful port district of La Boca and the aristocratic, melancholic San Telmo. We trace the city's story from its founding through immigration, tango, art, and local food. Tour led in English; Russian or Spanish on request.",
+            "precio": 60.00,
+            "duracion_minutos": 360,
+            "distance_km": 6.0,
+            "neighborhoods": "La Boca, San Telmo",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "time": "09:30",
+                    "place": "La Boca – Caminito",
+                    "desc": "Meeting point and introduction. The history of the port, Genoese and Italian immigration, conventillos, and the colorful facades of Caminito.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:00",
+                    "place": "La Bombonera / Boca neighborhood",
+                    "desc": "Football culture, street art, and photo stops in the heart of La Boca.",
+                },
+                {
+                    "day": 1,
+                    "time": "12:30",
+                    "place": "Mercado de San Telmo",
+                    "desc": "Walk to San Telmo and explore the market: antiques, local producers, snacks, and everyday porteno life.",
+                },
+                {
+                    "day": 1,
+                    "time": "14:00",
+                    "place": "Plaza Dorrego",
+                    "desc": "Tango history, street performers, and a lunch break in the historic square.",
+                },
+                {
+                    "day": 1,
+                    "time": "15:30",
+                    "place": "San Telmo backstreets",
+                    "desc": "Immigration stories, artists, hidden courtyards, and the bohemian side of San Telmo.",
+                },
+                {
+                    "day": 1,
+                    "time": "16:30",
+                    "place": "Local food stop: empanadas & mate",
+                    "desc": "A local tasting and wrap-up of the route.",
+                },
+            ],
+            "pois": [
+                {
+                    "n": "Caminito",
+                    "lat": -34.6390,
+                    "lng": -58.3630,
+                    "d": "The most colorful street of La Boca.",
+                },
+                {
+                    "n": "La Bombonera",
+                    "lat": -34.6356,
+                    "lng": -58.3647,
+                    "d": "Boca Juniors stadium and football culture.",
+                },
+                {
+                    "n": "Mercado de San Telmo",
+                    "lat": -34.6190,
+                    "lng": -58.3730,
+                    "d": "Historic market with local food and antiques.",
+                },
+                {
+                    "n": "Plaza Dorrego",
+                    "lat": -34.6211,
+                    "lng": -58.3732,
+                    "d": "The heart of San Telmo and tango street life.",
+                },
+            ],
+            "audio": [
+                {
+                    "titulo": "Introduction to La Boca",
+                    "duracion_segundos": 150,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                },
+                {
+                    "titulo": "Immigration and Caminito",
+                    "duracion_segundos": 210,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                },
+                {
+                    "titulo": "San Telmo and Tango",
+                    "duracion_segundos": 180,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                },
+            ],
+        },
+        {
+            "c": "Argentina",
+            "f": "ar",
+            "city": "Buenos Aires",
+            "desc": "Elegant districts, historic cafes, cemeteries, parks, boutiques, and the European-facing side of Buenos Aires.",
+            "img": "photo-1589909202802-8f4aadce1849",
+            "t": "Palermo & Recoleta: Glamour, Customs & Legends",
+            "cat": "culture",
+            "coords": "-34.5875,-58.3930",
+            "descripcion": "Recoleta, Palermo, and the city center: elegance that ages before your eyes. Continue discovering Buenos Aires—ambitious, wealthy, brilliant, and deeply European—through cemeteries, cafes, boutiques, parks, and legends.",
+            "precio": 70.00,
+            "duracion_minutos": 420,
+            "distance_km": 8.0,
+            "neighborhoods": "Recoleta, Palermo, City Center",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "time": "10:00",
+                    "place": "Recoleta Cemetery",
+                    "desc": "Meeting and introduction. Mausoleums, Eva Peron's tomb, and the legends of Argentina's most famous cemetery.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:30",
+                    "place": "El Ateneo Grand Splendid",
+                    "desc": "A beautiful theater converted into a bookstore; Recoleta architecture and cafe culture.",
+                },
+                {
+                    "day": 1,
+                    "time": "12:30",
+                    "place": "Floralis Generica / Palermo parks",
+                    "desc": "Photo stop and a walk through the park area.",
+                },
+                {
+                    "day": 1,
+                    "time": "13:30",
+                    "place": "Palermo Soho",
+                    "desc": "Lunch, boutiques, street art, local design, and the creative side of Palermo.",
+                },
+                {
+                    "day": 1,
+                    "time": "15:00",
+                    "place": "MALBA / Palermo Chico",
+                    "desc": "Art and elegant residential neighborhoods.",
+                },
+                {
+                    "day": 1,
+                    "time": "16:00",
+                    "place": "Palermo Rose Garden",
+                    "desc": "The Rosedal, city views, and a relaxed wrap-up of the route.",
+                },
+            ],
+            "pois": [
+                {
+                    "n": "Recoleta Cemetery",
+                    "lat": -34.5875,
+                    "lng": -58.3930,
+                    "d": "Historic cemetery with elaborate mausoleums.",
+                },
+                {
+                    "n": "El Ateneo Grand Splendid",
+                    "lat": -34.5959,
+                    "lng": -58.3940,
+                    "d": "Theater-turned-bookstore.",
+                },
+                {
+                    "n": "Floralis Generica",
+                    "lat": -34.5820,
+                    "lng": -58.3930,
+                    "d": "Iconic giant metal flower.",
+                },
+                {
+                    "n": "Palermo Soho",
+                    "lat": -34.5880,
+                    "lng": -58.4300,
+                    "d": "Trendy area with boutiques and street art.",
+                },
+                {
+                    "n": "MALBA",
+                    "lat": -34.5770,
+                    "lng": -58.4030,
+                    "d": "Museum of Latin American Art.",
+                },
+                {
+                    "n": "Rosedal",
+                    "lat": -34.5740,
+                    "lng": -58.4180,
+                    "d": "Rose garden in Palermo.",
+                },
+            ],
+            "audio": [
+                {
+                    "titulo": "Recoleta and Its Legends",
+                    "duracion_segundos": 180,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                },
+                {
+                    "titulo": "Palermo and European Buenos Aires",
+                    "duracion_segundos": 220,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                },
+                {
+                    "titulo": "Art, Parks, and Local Life",
+                    "duracion_segundos": 190,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                },
+            ],
+        },
+        {
+            "c": "Argentina",
+            "f": "ar",
+            "city": "Buenos Aires",
+            "desc": "A local food route through markets, cafes, empanadas, asado, mate, and Argentine sweets.",
+            "img": "photo-1558030006-450675393462",
+            "t": "Tastes of Buenos Aires: Local Food Tour",
+            "cat": "food",
+            "coords": "-34.6190,-58.3730",
+            "descripcion": "Taste Buenos Aires through local spots rather than tourist restaurants: from asado and wine to coffee and empanadas. Breakfast, snack, and lunch are included.",
+            "precio": 75.00,
+            "duracion_minutos": 360,
+            "distance_km": 4.5,
+            "neighborhoods": "San Telmo, Palermo, Recoleta",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "time": "09:00",
+                    "place": "Local cafe – breakfast",
+                    "desc": "Meeting point. Cafe con leche, medialunas, and an introduction to Buenos Aires food culture.",
+                },
+                {
+                    "day": 1,
+                    "time": "10:00",
+                    "place": "San Telmo Market",
+                    "desc": "Local producers, cheeses, spices, and market life.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:30",
+                    "place": "Empanada tasting",
+                    "desc": "Different regional empanadas and the stories behind them.",
+                },
+                {
+                    "day": 1,
+                    "time": "13:00",
+                    "place": "Asado lunch",
+                    "desc": "A local grill: cuts of meat, chimichurri, and Malbec.",
+                },
+                {
+                    "day": 1,
+                    "time": "15:00",
+                    "place": "Mate & alfajores stop",
+                    "desc": "The mate ritual and traditional Argentine sweets.",
+                },
+                {
+                    "day": 1,
+                    "time": "16:00",
+                    "place": "Heladeria / coffee",
+                    "desc": "Argentine ice cream and coffee; final wrap-up.",
+                },
+            ],
+            "pois": [
+                {
+                    "n": "Local cafe in San Telmo",
+                    "lat": -34.6200,
+                    "lng": -58.3730,
+                    "d": "Traditional cafe breakfast.",
+                },
+                {
+                    "n": "Mercado de San Telmo",
+                    "lat": -34.6190,
+                    "lng": -58.3730,
+                    "d": "Local market and producers.",
+                },
+                {
+                    "n": "Empanada spot",
+                    "lat": -34.6180,
+                    "lng": -58.3740,
+                    "d": "Regional empanada tasting.",
+                },
+                {
+                    "n": "Local asado restaurant",
+                    "lat": -34.6200,
+                    "lng": -58.3750,
+                    "d": "Traditional Argentine grill.",
+                },
+                {
+                    "n": "Mate and sweets stop",
+                    "lat": -34.6210,
+                    "lng": -58.3730,
+                    "d": "Mate ritual and alfajores.",
+                },
+                {
+                    "n": "Heladeria",
+                    "lat": -34.6220,
+                    "lng": -58.3740,
+                    "d": "Argentine ice cream.",
+                },
+            ],
+            "audio": [
+                {
+                    "titulo": "Buenos Aires Food Culture",
+                    "duracion_segundos": 160,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                },
+                {
+                    "titulo": "Empanadas and Asado",
+                    "duracion_segundos": 230,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                },
+                {
+                    "titulo": "Mate, Coffee, and Sweets",
+                    "duracion_segundos": 170,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                },
+            ],
+        },
+        {
+            "c": "Argentina",
+            "f": "ar",
+            "city": "Buenos Aires",
+            "desc": "A 3-day package combining La Boca, San Telmo, Palermo, Recoleta, local food, and Tigre Delta.",
+            "img": "photo-1589909202802-8f4aadce1849",
+            "t": "All Buenos Aires + Tigre: 3-Day Package",
+            "cat": "culture",
+            "coords": "-34.6037,-58.3816",
+            "descripcion": "The best choice if you have three free days and want to see the whole city without rushing. We combine three author routes—La Boca & San Telmo, Palermo & Recoleta, and the food tour—and add a Tigre Delta boat ride and a local train for a fuller understanding of Argentina. In Tigre: fruit market, lunch by the water, Sarmiento Museum, and the real rhythm of island life. Comfortable pace, stops at the best viewpoints and trusted local places. Group up to 6.",
+            "precio": 165.00,
+            "duracion_minutos": 4320,
+            "distance_km": 45.0,
+            "neighborhoods": "La Boca, San Telmo, Palermo, Recoleta, Tigre",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "time": "09:30",
+                    "place": "La Boca – Caminito",
+                    "desc": "Meeting and introduction. Port history, immigration, conventillos, and colorful Caminito.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:00",
+                    "place": "La Bombonera / Boca neighborhood",
+                    "desc": "Football culture, street art, and photo stops.",
+                },
+                {
+                    "day": 1,
+                    "time": "12:30",
+                    "place": "Mercado de San Telmo",
+                    "desc": "Market, antiques, local producers, and snacks.",
+                },
+                {
+                    "day": 1,
+                    "time": "14:00",
+                    "place": "Plaza Dorrego",
+                    "desc": "Tango history, street performers, and lunch break.",
+                },
+                {
+                    "day": 1,
+                    "time": "15:30",
+                    "place": "San Telmo backstreets",
+                    "desc": "Immigration stories, artists, and hidden courtyards.",
+                },
+                {
+                    "day": 1,
+                    "time": "16:30",
+                    "place": "Empanadas & mate",
+                    "desc": "Local tasting and wrap-up of day one.",
+                },
+                {
+                    "day": 2,
+                    "time": "10:00",
+                    "place": "Recoleta Cemetery",
+                    "desc": "Mausoleums, Eva Peron's tomb, and local legends.",
+                },
+                {
+                    "day": 2,
+                    "time": "11:30",
+                    "place": "El Ateneo Grand Splendid",
+                    "desc": "Theater-turned-bookstore and Recoleta architecture.",
+                },
+                {
+                    "day": 2,
+                    "time": "12:30",
+                    "place": "Floralis Generica / Palermo parks",
+                    "desc": "Photo stop and park walk.",
+                },
+                {
+                    "day": 2,
+                    "time": "13:30",
+                    "place": "Palermo Soho",
+                    "desc": "Lunch, boutiques, street art, and local design.",
+                },
+                {
+                    "day": 2,
+                    "time": "15:00",
+                    "place": "MALBA / Palermo Chico",
+                    "desc": "Art and elegant neighborhoods.",
+                },
+                {
+                    "day": 2,
+                    "time": "16:00",
+                    "place": "Palermo Rose Garden",
+                    "desc": "Rosedal and relaxed city views.",
+                },
+                {
+                    "day": 3,
+                    "time": "08:30",
+                    "place": "Train to Tigre",
+                    "desc": "Local train to Tigre and introduction to the delta region.",
+                },
+                {
+                    "day": 3,
+                    "time": "10:00",
+                    "place": "Tigre Fruit Market",
+                    "desc": "Local fruit market and riverfront atmosphere.",
+                },
+                {
+                    "day": 3,
+                    "time": "11:30",
+                    "place": "Tigre Delta boat ride",
+                    "desc": "Boat ride through the delta and island channels.",
+                },
+                {
+                    "day": 3,
+                    "time": "13:00",
+                    "place": "Lunch by the water",
+                    "desc": "Local lunch with river views.",
+                },
+                {
+                    "day": 3,
+                    "time": "15:00",
+                    "place": "Sarmiento Museum",
+                    "desc": "House-museum and the history of Domingo F. Sarmiento.",
+                },
+                {
+                    "day": 3,
+                    "time": "16:30",
+                    "place": "Island life & mate",
+                    "desc": "The rhythm of islanders, mate, and local stories.",
+                },
+                {
+                    "day": 3,
+                    "time": "18:00",
+                    "place": "Return to Buenos Aires",
+                    "desc": "Return and final wrap-up of the 3-day package.",
+                },
+            ],
+            "pois": [
+                {
+                    "n": "Caminito",
+                    "lat": -34.6390,
+                    "lng": -58.3630,
+                    "d": "Colorful La Boca street.",
+                },
+                {
+                    "n": "La Bombonera",
+                    "lat": -34.6356,
+                    "lng": -58.3647,
+                    "d": "Boca Juniors stadium.",
+                },
+                {
+                    "n": "Mercado de San Telmo",
+                    "lat": -34.6190,
+                    "lng": -58.3730,
+                    "d": "Historic market.",
+                },
+                {
+                    "n": "Plaza Dorrego",
+                    "lat": -34.6211,
+                    "lng": -58.3732,
+                    "d": "San Telmo square.",
+                },
+                {
+                    "n": "Recoleta Cemetery",
+                    "lat": -34.5875,
+                    "lng": -58.3930,
+                    "d": "Famous cemetery.",
+                },
+                {
+                    "n": "El Ateneo Grand Splendid",
+                    "lat": -34.5959,
+                    "lng": -58.3940,
+                    "d": "Bookstore in a former theater.",
+                },
+                {
+                    "n": "Floralis Generica",
+                    "lat": -34.5820,
+                    "lng": -58.3930,
+                    "d": "Metal flower sculpture.",
+                },
+                {
+                    "n": "Palermo Soho",
+                    "lat": -34.5880,
+                    "lng": -58.4300,
+                    "d": "Trendy Palermo area.",
+                },
+                {
+                    "n": "MALBA",
+                    "lat": -34.5770,
+                    "lng": -58.4030,
+                    "d": "Latin American art museum.",
+                },
+                {"n": "Rosedal", "lat": -34.5740, "lng": -58.4180, "d": "Rose garden."},
+                {
+                    "n": "Tigre Fruit Market",
+                    "lat": -34.4260,
+                    "lng": -58.5790,
+                    "d": "Local fruit market in Tigre.",
+                },
+                {
+                    "n": "Tigre Delta",
+                    "lat": -34.4220,
+                    "lng": -58.5740,
+                    "d": "Delta boat ride.",
+                },
+                {
+                    "n": "Sarmiento Museum",
+                    "lat": -34.4160,
+                    "lng": -58.5780,
+                    "d": "Historic house-museum.",
+                },
+            ],
+            "audio": [
+                {
+                    "titulo": "Day 1: La Boca and San Telmo",
+                    "duracion_segundos": 240,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                },
+                {
+                    "titulo": "Day 2: Recoleta and Palermo",
+                    "duracion_segundos": 260,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                },
+                {
+                    "titulo": "Day 3: Tigre and the Delta",
+                    "duracion_segundos": 300,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                },
+                {
+                    "titulo": "Local Food and Mate",
+                    "duracion_segundos": 180,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+                },
+            ],
+        },
+        {
+            "c": "Argentina",
+            "f": "ar",
+            "city": "Buenos Aires",
+            "desc": "The historic core of Buenos Aires: Plaza de Mayo, Casa Rosada, the Cabildo, the Cathedral, the Obelisk, and Teatro Colon.",
+            "img": "photo-1589909202802-8f4aadce1849",
+            "t": "Buenos Aires City Center & History",
             "cat": "history",
             "coords": "-34.6037,-58.3816",
+            "descripcion": "A compact introduction to Buenos Aires' historic core: Plaza de Mayo, Casa Rosada, the Cabildo, the Metropolitan Cathedral, the Obelisk, and Teatro Colon. Ideal for first-time visitors who want the essential history and architecture in one route.",
+            "precio": 9.99,
+            "duracion_minutos": 240,
+            "distance_km": 5.0,
+            "neighborhoods": "Monserrat, Plaza de Mayo, City Center",
+            "itinerary": [
+                {
+                    "day": 1,
+                    "time": "10:00",
+                    "place": "Plaza de Mayo",
+                    "desc": "Meeting point and introduction to the historic main square.",
+                },
+                {
+                    "day": 1,
+                    "time": "10:30",
+                    "place": "Casa Rosada",
+                    "desc": "The presidential palace and its political history.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:00",
+                    "place": "Cabildo",
+                    "desc": "Colonial government building and the May Revolution.",
+                },
+                {
+                    "day": 1,
+                    "time": "11:30",
+                    "place": "Metropolitan Cathedral",
+                    "desc": "Buenos Aires' main Catholic church and its history.",
+                },
+                {
+                    "day": 1,
+                    "time": "12:30",
+                    "place": "Obelisco",
+                    "desc": "The city's iconic landmark and Avenida 9 de Julio.",
+                },
+                {
+                    "day": 1,
+                    "time": "13:00",
+                    "place": "Teatro Colon",
+                    "desc": "Exterior visit and the story of one of the world's great opera houses.",
+                },
+                {
+                    "day": 1,
+                    "time": "14:00",
+                    "place": "Cafe / wrap-up",
+                    "desc": "Optional cafe stop and final recommendations.",
+                },
+            ],
             "pois": [
                 {
                     "n": "Plaza de Mayo",
-                    "lat": -34.6082,
+                    "lat": -34.6083,
                     "lng": -58.3712,
                     "d": "The historic main square.",
                 },
@@ -39,8 +631,55 @@ with app.app_context():
                     "lng": -58.3702,
                     "d": "The presidential palace.",
                 },
+                {
+                    "n": "Cabildo",
+                    "lat": -34.6087,
+                    "lng": -58.3735,
+                    "d": "Colonial government building.",
+                },
+                {
+                    "n": "Metropolitan Cathedral",
+                    "lat": -34.6074,
+                    "lng": -58.3733,
+                    "d": "Main Catholic cathedral.",
+                },
+                {
+                    "n": "Obelisco",
+                    "lat": -34.6037,
+                    "lng": -58.3816,
+                    "d": "Iconic city landmark.",
+                },
+                {
+                    "n": "Teatro Colon",
+                    "lat": -34.6011,
+                    "lng": -58.3830,
+                    "d": "Famous opera house.",
+                },
+            ],
+            "audio": [
+                {
+                    "titulo": "Introduction to Buenos Aires History",
+                    "duracion_segundos": 140,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+                },
+                {
+                    "titulo": "Plaza de Mayo and Casa Rosada",
+                    "duracion_segundos": 200,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+                },
+                {
+                    "titulo": "Obelisco and Teatro Colon",
+                    "duracion_segundos": 180,
+                    "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+                },
             ],
         },
+    ]
+
+    # =====================================================================
+    # OTHER CITIES
+    # =====================================================================
+    other_routes = [
         {
             "c": "Brazil",
             "f": "br",
@@ -123,7 +762,7 @@ with app.app_context():
                     "lat": -12.0464,
                     "lng": -77.0428,
                     "d": "Historic center square.",
-                }
+                },
             ],
         },
         {
@@ -141,7 +780,7 @@ with app.app_context():
                     "lat": -33.4253,
                     "lng": -70.6342,
                     "d": "Best views of the city.",
-                }
+                },
             ],
         },
         {
@@ -159,7 +798,7 @@ with app.app_context():
                     "lat": -0.2147,
                     "lng": -78.5072,
                     "d": "Gothic cathedral.",
-                }
+                },
             ],
         },
         {
@@ -177,7 +816,7 @@ with app.app_context():
                     "lat": -16.5666,
                     "lng": -68.0833,
                     "d": "Surreal rock formations.",
-                }
+                },
             ],
         },
         {
@@ -195,7 +834,7 @@ with app.app_context():
                     "lat": -34.9058,
                     "lng": -56.1991,
                     "d": "Main square.",
-                }
+                },
             ],
         },
         {
@@ -213,7 +852,7 @@ with app.app_context():
                     "lat": -25.2772,
                     "lng": -57.6372,
                     "d": "Government palace.",
-                }
+                },
             ],
         },
         {
@@ -231,7 +870,7 @@ with app.app_context():
                     "lat": 10.5453,
                     "lng": -66.8736,
                     "d": "Mountain park.",
-                }
+                },
             ],
         },
         {
@@ -249,7 +888,7 @@ with app.app_context():
                     "lat": 9.9333,
                     "lng": -84.0764,
                     "d": "Historic theatre.",
-                }
+                },
             ],
         },
         {
@@ -267,7 +906,7 @@ with app.app_context():
                     "lat": 9.0800,
                     "lng": -79.6800,
                     "d": "Engineering marvel.",
-                }
+                },
             ],
         },
         {
@@ -285,7 +924,7 @@ with app.app_context():
                     "lat": 23.1367,
                     "lng": -82.3589,
                     "d": "Colonial center.",
-                }
+                },
             ],
         },
         {
@@ -303,27 +942,38 @@ with app.app_context():
                     "lat": 14.6419,
                     "lng": -90.5128,
                     "d": "Historic building.",
-                }
+                },
             ],
         },
     ]
 
+    data = buenos_aires_routes + other_routes
+
+    # =====================================================================
+    # SEED LOOP
+    # =====================================================================
     for d in data:
+        portada = f"https://images.unsplash.com/{d['img']}?w=800"
+
         t = Tour(
             titulo=d["t"],
-            descripcion="Experience the best of this beautiful destination with an immersive audio tour.",
-            precio=9.99,
-            duracion_minutos=90,
+            descripcion=d.get(
+                "descripcion",
+                "Experience the best of this beautiful destination with an immersive audio tour.",
+            ),
+            precio=d.get("precio", 9.99),
+            duracion_minutos=d.get("duracion_minutos", 90),
             categoria=d["cat"],
-            portada_url=f"https://images.unsplash.com/{d['img']}?w=800",
+            portada_url=portada,
             country=d["c"],
             city=d["city"],
             city_description=d["desc"],
             flag_url=f"https://flagcdn.com/w320/{d['f']}.png",
-            distance_km=5.5,
-            neighborhoods=f"{d['city']} Center, Old Town",
+            distance_km=d.get("distance_km", 5.5),
+            neighborhoods=d.get("neighborhoods", f"{d['city']} Center, Old Town"),
             map_coords=d["coords"],
-            itinerary=[
+            itinerary=d.get("itinerary")
+            or [
                 {
                     "day": 1,
                     "time": "10:00",
@@ -345,27 +995,36 @@ with app.app_context():
                     "desc": "Second day activities.",
                 },
             ],
-            banners=[f"https://images.unsplash.com/{d['img']}?w=800"],
+            banners=d.get("banners", [portada]),
         )
         db.session.add(t)
         db.session.flush()
-        a1 = AudioTrack(
-            id_tour=t.id_tour,
-            orden=1,
-            titulo="Introduction",
-            duracion_segundos=120,
-            archivo_url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        )
-        a2 = AudioTrack(
-            id_tour=t.id_tour,
-            orden=2,
-            titulo="Main History",
-            duracion_segundos=180,
-            archivo_url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        )
-        db.session.add_all([a1, a2])
 
-        for poi in d["pois"]:
+        audio_tracks = d.get("audio") or [
+            {
+                "titulo": "Introduction",
+                "duracion_segundos": 120,
+                "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            },
+            {
+                "titulo": "Main History",
+                "duracion_segundos": 180,
+                "archivo_url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            },
+        ]
+
+        for idx, a in enumerate(audio_tracks, start=1):
+            db.session.add(
+                AudioTrack(
+                    id_tour=t.id_tour,
+                    orden=idx,
+                    titulo=a["titulo"],
+                    duracion_segundos=a["duracion_segundos"],
+                    archivo_url=a["archivo_url"],
+                )
+            )
+
+        for poi in d.get("pois", []):
             p = PuntoInteres(
                 id_tour=t.id_tour,
                 lat=poi["lat"],
@@ -383,15 +1042,18 @@ with app.app_context():
         )
         db.session.add(v)
 
+    # =====================================================================
+    # BLOG POSTS
+    # =====================================================================
     post1 = BlogPost(
         title="Top 10 Hidden Gems in Buenos Aires",
         content="""
-        Buenos Aires is a city that rewards those who wander off the beaten path. While the Obelisco and Casa Rosada are must-sees, the true soul of the city lies in its hidden corners. 
-        
-        Start with the 'Librería El Ateneo Grand Splendid' in Recoleta, an opulent theater converted into a breathtaking bookstore. Then, head to the 'Barrio de Palermo' to find hidden 'Puertas Cerradas' (closed-door restaurants) where local chefs serve gourmet meals in intimate settings. 
-        
-        Don't miss the 'Jardín Japonés', a peaceful oasis amidst the concrete jungle. For tango lovers, avoid the tourist traps in San Telmo and instead visit 'La Catedral Club', an underground milonga that feels like a secret society. 
-        
+        Buenos Aires is a city that rewards those who wander off the beaten path. While the Obelisco and Casa Rosada are must-sees, the true soul of the city lies in its hidden corners.
+
+        Start with the 'Libreria El Ateneo Grand Splendid' in Recoleta, an opulent theater converted into a breathtaking bookstore. Then, head to the 'Barrio de Palermo' to find hidden 'Puertas Cerradas' (closed-door restaurants) where local chefs serve gourmet meals in intimate settings.
+
+        Don't miss the 'Jardin Japones', a peaceful oasis amidst the concrete jungle. For tango lovers, avoid the tourist traps in San Telmo and instead visit 'La Catedral Club', an underground milonga that feels like a secret society.
+
         Finally, explore the street art in the hidden alleys of Barracas. The city reveals its magic when you get lost in its history.
         """,
         image_url="https://images.unsplash.com/photo-1589909202802-8f4aadce1849?w=600",
@@ -402,12 +1064,12 @@ with app.app_context():
         title="Guide to Rio's Best Beaches",
         content="""
         Rio de Janeiro is synonymous with sun, sand, and samba. With over 70 beaches, choosing the right one can be overwhelming.
-        
+
         Copacabana is the most famous, with its iconic black and white wave mosaic. It's vibrant but crowded. For a more upscale and safer experience, head to Ipanema or Leblon, where the locals hang out. The 'Posto 9' in Ipanema is legendary for its bohemian crowd.
-        
-        If you want to escape the city noise, try 'Prainha', a hidden gem located further south, surrounded by lush mountains. It's a favorite among surfers. 
-        
-        Safety tip: Always bring only what you need. Leave your phone and expensive jewelry at the hotel. Instead, bring some cash for a refreshing 'Água de Coco' (coconut water) from the local vendors. Embrace the 'Carioca' spirit and enjoy the sunset at Arpoador beach!
+
+        If you want to escape the city noise, try 'Prainha', a hidden gem located further south, surrounded by lush mountains. It's a favorite among surfers.
+
+        Safety tip: Always bring only what you need. Leave your phone and expensive jewelry at the hotel. Instead, bring some cash for a refreshing 'Agua de Coco' (coconut water) from the local vendors. Embrace the 'Carioca' spirit and enjoy the sunset at Arpoador beach!
         """,
         image_url="https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=600",
         date=datetime(2026, 11, 12),
@@ -416,12 +1078,12 @@ with app.app_context():
     post3 = BlogPost(
         title="The Ultimate Guide to Argentine Asado",
         content="""
-        An 'Asado' is not just a barbecue; it is a sacred ritual, a social event, and the backbone of Argentine cuisine. 
-        
-        The secret lies in the fire. A true 'Asador' (grill master) uses wood or charcoal to create hot embers, never exposing the meat directly to the flame. The cuts you must try include 'Asado de Tira' (short ribs), 'Vacío' (flank steak), and 'Chorizo' (sausage). 
-        
-        Before the meat, you'll be served 'Provoleta' (grilled provolone cheese) and 'Chimichurri' (a vibrant sauce made of parsley, garlic, vinegar, and oil). 
-        
+        An 'Asado' is not just a barbecue; it is a sacred ritual, a social event, and the backbone of Argentine cuisine.
+
+        The secret lies in the fire. A true 'Asador' (grill master) uses wood or charcoal to create hot embers, never exposing the meat directly to the flame. The cuts you must try include 'Asado de Tira' (short ribs), 'Vacio' (flank steak), and 'Chorizo' (sausage).
+
+        Before the meat, you'll be served 'Provoleta' (grilled provolone cheese) and 'Chimichurri' (a vibrant sauce made of parsley, garlic, vinegar, and oil).
+
         The golden rule of the Asado is patience. It takes hours to prepare, and it is meant to be enjoyed slowly with good wine (Malbec is the perfect pairing) and great conversation. Never rush an Asado; it is the ultimate expression of Argentine hospitality.
         """,
         image_url="https://images.unsplash.com/photo-1558030006-450675393462?w=600",
