@@ -7,6 +7,7 @@ from flask import (
     session,
     flash,
     send_file,
+    jsonify,
 )
 from models import (
     db,
@@ -73,36 +74,73 @@ def country(country_name):
 
 @web_bp.route("/city/<city_name>")
 def city(city_name):
-    categoria = request.args.get("categoria")
+    # Получаем все параметры из URL
+    categoria = request.args.get("categoria", "").strip()
+    precio_max = request.args.get("precio_max", type=float)
+    duracion = request.args.get("duracion", "").strip()
     orden = request.args.get("orden", "nuevo")
     page = request.args.get("page", 1, type=int)
+
+    # Базовый запрос по городу
     query = Tour.query.filter_by(city=city_name)
+
+    # Фильтр по категории
     if categoria:
-        query = query.filter_by(categoria=categoria)
+        query = query.filter(Tour.categoria == categoria)
+
+    # Фильтр по максимальной цене
+    if precio_max is not None:
+        query = query.filter(Tour.precio <= precio_max)
+
+    # Фильтр по длительности
+    if duracion == "under1h":
+        query = query.filter(Tour.duracion_minutos < 60)
+    elif duracion == "1to3h":
+        query = query.filter(Tour.duracion_minutos >= 60, Tour.duracion_minutos <= 180)
+    elif duracion == "halfday":
+        query = query.filter(Tour.duracion_minutos > 180, Tour.duracion_minutos <= 360)
+    elif duracion == "fullday":
+        query = query.filter(Tour.duracion_minutos > 360)
+
+    # Сортировка
     if orden == "precio_asc":
         query = query.order_by(Tour.precio.asc())
     elif orden == "precio_desc":
         query = query.order_by(Tour.precio.desc())
-    else:
+    elif orden == "rating":
+        query = query.order_by(
+            Tour.id_tour.desc()
+        )  # Если добавишь рейтинг в БД, поменяешь тут
+    else:  # "nuevo"
         query = query.order_by(Tour.id_tour.desc())
-    pagination = query.paginate(page=page, per_page=2, error_out=False)
+
+    # Пагинация (поставил 12 туров на страницу вместо твоих 2)
+    pagination = query.paginate(page=page, per_page=12, error_out=False)
     tours = pagination.items
+
+    # Инфа о городе (берем из любого тура)
     first_tour = Tour.query.filter_by(city=city_name).first()
-    city_desc = first_tour.city_description if first_tour else ""
-    flag = first_tour.flag_url if first_tour else ""
-    country = first_tour.country if first_tour else ""
+    if not first_tour:
+        abort(404)  # На случай если город не найден
+
+    # Категории собираем ДО фильтров, чтобы список не сужался после клика
     all_city_tours = Tour.query.filter_by(city=city_name).all()
-    categories = list(set([t.categoria for t in all_city_tours]))
+    categories = sorted(list(set([t.categoria for t in all_city_tours])))
+
     return render_template(
-        "catalogo.html",
+        "catalogo.html",  # У тебя в контроллере указан catalogo.html
         city=city_name,
-        country=country,
+        country=first_tour.country,
         tours=tours,
-        city_desc=city_desc,
-        flag=flag,
+        city_desc=first_tour.city_description,
+        flag=first_tour.flag_url,
         categories=categories,
         current_cat=categoria,
         current_orden=orden,
+        current_precio_max=(
+            int(precio_max) if precio_max is not None else 200
+        ),  # Дефолт 200
+        current_duracion=duracion,
         pagination=pagination,
     )
 
@@ -133,6 +171,8 @@ def detalle_tour(tour_id):
     )
     reviews = Valoracion.query.filter_by(id_tour=tour.id_tour).all()
 
+    in_cart = tour_id in session.get("cart", [])
+
     return render_template(
         "tour.html",
         tour=tour,
@@ -140,6 +180,7 @@ def detalle_tour(tour_id):
         related_tours=related_tours,
         reviews=reviews,
         active_sub=active_sub,
+        in_cart=in_cart,
     )
 
 
@@ -175,12 +216,15 @@ def my_tour(tour_id):
     ]
     audios_data = [{"titulo": a.titulo, "url": a.archivo_url} for a in tour.audios]
 
+    in_cart = tour_id in session.get("cart", [])
+
     return render_template(
         "my_tour.html",
         tour=tour,
         pois_data=pois_data,
         itinerary_data=itinerary_data,
         audios_data=audios_data,
+        in_cart=in_cart,
     )
 
 
@@ -574,7 +618,14 @@ def add_to_cart(tour_id):
     if item_id not in session["cart"]:
         session["cart"].append(item_id)
         session.modified = True
-        flash("Item added to your cart!", "success")
+        msg = "Item added to your cart!"
+    else:
+        msg = "Item is already in cart."
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return jsonify({"status": "success", "message": msg})
+
+    flash(msg, "success")
     return redirect(request.referrer or url_for("web.home"))
 
 
